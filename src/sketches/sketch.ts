@@ -1,24 +1,54 @@
+import { CanvasSpace, Rectangle, Color } from 'pts'
+import type { Group, Form } from 'pts'
+
 abstract class Sketch {
-  public name: string
+  private id: string
+  protected space: CanvasSpace
+  protected form: Form
+  protected playOnce: number
 
-  constructor(name: string) {
-    this.name = name
-    console.log(`${this.name} has been created.`)
-  }
-
-  abstract init(): void
-  abstract start(): void
-
-  public static createElement(): HTMLElement {
+  private static createElement(): HTMLElement {
     const el = document.createElement('div')
     el.classList.add('canvasSpace')
     document.body.appendChild(el)
     return el
   }
 
+  public static fullWidthRect(space: CanvasSpace): Group {
+    return Rectangle.from([0, 0], space.width, space.height)
+  }
+
+  public static rgbaFromHex(hex: string, alpha: number): string {
+    const color = Color.fromHex(hex)
+    color.alpha = alpha
+    return color.rgba
+  }
+
+  constructor(id: string, playOnce = 0) {
+    this.id = id
+    this.space = new CanvasSpace(Sketch.createElement()).setup({
+      bgcolor: '#fff',
+      resize: true,
+      retina: true,
+    })
+    this.form = this.space.getForm()
+    this.playOnce = playOnce
+    console.log(`${this.id} has been created.`)
+  }
+
+  /**
+   * Setup everything that needs to be done before space.play()
+   */
+  abstract init(): void
+
   public run(): void {
     this.init()
-    this.start()
+    this.space.bindMouse().bindTouch()
+    if (this.playOnce) {
+      this.space.playOnce(this.playOnce)
+    } else {
+      this.space.play()
+    }
   }
 }
 
