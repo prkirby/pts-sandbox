@@ -23,8 +23,9 @@ class Bubble {
   }
 
   public update(scale: number): void {
-    this.alphaCycle = Num.cycle(scale, Shaping.exponentialOut)
-    // this.size = this.size * Num.mapToRange(Math.abs(1 - scale), 0, 1, 0.8, 1)
+    this.alphaCycle = Num.cycle(scale, Shaping.sineOut)
+    const sizeOffset = Num.mapToRange(Math.abs(1 - scale), 0, 1, 0.99, 1)
+    this.size *= sizeOffset
     // if (scale > 0.5) debugger
     // debugger
     const originYOffset = this.origin.y + this.movement
