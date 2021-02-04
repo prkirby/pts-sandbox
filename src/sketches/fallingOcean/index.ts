@@ -29,9 +29,10 @@ class FallingOcean extends Sketch {
    */
   private addBackground(): void {
     const gradient = this.form.gradient([
-      [0.4, COLORS.darkblue],
-      [0.9, COLORS.bluegrotto],
-      [1, COLORS.tiffanyblue],
+      [0.3, '#000'],
+      [0.8, COLORS.darkblue],
+      [0.98, COLORS.bluegrotto],
+      [1, COLORS.cyan],
     ])
 
     this.space.add((_time, _ftime, space) => {
@@ -41,7 +42,10 @@ class FallingOcean extends Sketch {
         space.center,
         Math.max(space.width, space.height)
       )
-      const c2 = Circle.fromCenter(space.pointer, 2)
+      const oppositePointer = space.pointer
+        .clone()
+        .rotate2D(Math.PI, space.center)
+      const c2 = Circle.fromCenter(oppositePointer, 2)
       this.form.fill(gradient(c1, c2)).circle(c1)
     })
   }

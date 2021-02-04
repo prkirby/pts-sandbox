@@ -1,4 +1,4 @@
-import { Num, Shaping } from 'pts'
+import { Num, Shaping, Circle } from 'pts'
 import type { Pt, CanvasForm } from 'pts'
 import Sketch from '../sketch'
 import { COLORS } from './constants'
@@ -36,12 +36,13 @@ class Bubble {
   }
 
   public render(form: CanvasForm): void {
-    const fillAlpha = Num.mapToRange(this.alphaCycle, 0, 1, 0, 0.2)
-    const strokeAlpha = Num.mapToRange(this.alphaCycle, 0, 1, 0, 0.6)
+    const fillAlpha = Num.mapToRange(this.alphaCycle, 0, 1, 0, 0.15)
+    const strokeAlpha = Num.mapToRange(this.alphaCycle, 0, 1, 0, 0.25)
+    const circle = Circle.fromCenter(this.center, this.size)
     form
-      .fill(Sketch.rgbaFromHex(COLORS.cyan, fillAlpha))
-      .stroke(Sketch.rgbaFromHex(COLORS.cyan, strokeAlpha))
-      .point(this.center, this.size, 'circle')
+      .fill(Sketch.rgbaFromHex(COLORS.tiffanyblue, fillAlpha))
+      .stroke(Sketch.rgbaFromHex(COLORS.tiffanyblue, strokeAlpha))
+      .circle(circle)
   }
 }
 
