@@ -31,6 +31,11 @@ abstract class Sketch {
    */
   abstract init(): Promise<boolean>
 
+  /**
+   * Handle all side effects on pause
+   */
+  protected abstract onPause(): void
+
   public async run(): Promise<boolean> {
     await this.init()
     this.space.bindMouse().bindTouch()
@@ -46,6 +51,7 @@ abstract class Sketch {
       switch (code) {
         case 'Space': // Space Bar
           this.space.pause(true) // Boolean true makes this act as a toggle
+          this.onPause()
           break
       }
     })

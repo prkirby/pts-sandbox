@@ -35,6 +35,10 @@ module.exports = {
         type: 'asset/resource',
       },
       {
+        test: /\.(mp3)$/i,
+        type: 'asset',
+      },
+      {
         test: /\.(csv|tsv)$/i,
         use: ['csv-loader'],
       },

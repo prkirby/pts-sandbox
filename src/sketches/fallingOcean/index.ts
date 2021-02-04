@@ -3,12 +3,14 @@ import Sketch from '../sketch'
 import BubbleGroup from './BubbleGroup'
 import { COLORS } from './constants'
 import { backgroundParticles, solidBackground } from 'tools'
+import SONG from './daniel_birch_restless_states_constrained_desire_2.mp3'
 
 class FallingOcean extends Sketch {
   protected space: CanvasSpace
   protected form: CanvasForm
   private tempo: Tempo
   private micInput: Sound
+  private song: Sound
 
   constructor() {
     super('Falling Ocean')
@@ -93,6 +95,22 @@ class FallingOcean extends Sketch {
     return false
   }
 
+  private async loadAudio(): Promise<boolean> {
+    console.log(SONG)
+    const song = await Sound.load(SONG)
+    this.song = song
+    song.start()
+    return true
+  }
+
+  protected onPause(): void {
+    if (this.song.playing) {
+      this.song.stop()
+    } else {
+      this.song.start()
+    }
+  }
+
   /**
    * Init Falling Ocean
    */
@@ -101,7 +119,9 @@ class FallingOcean extends Sketch {
     backgroundParticles(this.space, this.form, COLORS.tiffanyblue)
     this.drawBubbles()
     this.space.add(this.tempo)
-    return this.connectMicrophone()
+    await this.connectMicrophone()
+    await this.loadAudio()
+    return true
   }
 }
 
