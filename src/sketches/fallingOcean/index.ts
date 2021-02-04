@@ -8,11 +8,14 @@ import {
   Circle,
   Shaping,
   Rectangle,
+  Pt,
+  Geom,
 } from 'pts'
 import type { GroupLike } from 'pts'
 import Sketch from '../sketch'
 import BubbleGroup from './BubbleGroup'
 import { COLORS } from './constants'
+import { PointDescription } from './Types'
 
 class FallingOcean extends Sketch {
   protected space: CanvasSpace
@@ -29,8 +32,8 @@ class FallingOcean extends Sketch {
    */
   private addBackground(): void {
     const gradient = this.form.gradient([
-      [0.3, '#000'],
-      [0.8, COLORS.darkblue],
+      [0.5, '#000'],
+      [0.92, COLORS.darkblue],
       [0.98, COLORS.bluegrotto],
       [1, COLORS.cyan],
     ])
@@ -56,14 +59,7 @@ class FallingOcean extends Sketch {
   private addBackgroundParticles(): void {
     let points: GroupLike
 
-    interface pointDescription {
-      angle: number
-      magnitude?: number
-      minAlpha?: number
-      maxAlpha?: number
-    }
-
-    const pointDescriptions: pointDescription[] = []
+    const pointDescriptions: PointDescription[] = []
 
     this.space.add({
       start: (bound) => {
@@ -109,17 +105,17 @@ class FallingOcean extends Sketch {
   private drawBubbles(): void {
     const BubbleGroups: Set<BubbleGroup> = new Set()
 
-    this.tempo.every(1).start(() => {
+    this.tempo.every(3).start(() => {
       BubbleGroups.add(new BubbleGroup(this.space.pointer))
     }, 0)
 
-    this.space.add((time) => {
+    this.space.add((time, _ftime, space) => {
       BubbleGroups.forEach((bubbleGroup) => {
         if (bubbleGroup.isFinished()) {
           BubbleGroups.delete(bubbleGroup)
         }
 
-        bubbleGroup.update(time)
+        bubbleGroup.update(time, space)
         bubbleGroup.render(this.form)
       })
     })

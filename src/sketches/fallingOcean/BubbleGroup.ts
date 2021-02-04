@@ -1,5 +1,5 @@
 import { Rectangle, Create, Num, Bound } from 'pts'
-import type { Pt, CanvasForm } from 'pts'
+import type { Pt, CanvasForm, CanvasSpace } from 'pts'
 import Bubble from './Bubble'
 import { BUBBLE_MIN, BUBBLE_MAX } from './constants'
 
@@ -10,15 +10,17 @@ class BubbleGroup {
   private finalTime: number | null = null
   private renderTime: number
   private scale = 0
+  private space: CanvasSpace
 
-  constructor(pointer: Pt, renderTime = 4000) {
+  constructor(pointer: Pt, space?: CanvasSpace, renderTime = 4000) {
     this.pointer = pointer
     this.renderTime = renderTime
+    this.space = space
 
-    const boundingBox = Rectangle.fromCenter(this.pointer, 300)
+    const boundingBox = Rectangle.fromCenter(this.pointer, 600)
     const points = Create.distributeRandom(
       Bound.fromGroup(boundingBox),
-      Num.randomRange(0, 3)
+      Num.randomRange(0, 6)
     )
 
     points.forEach((point) => {
@@ -40,7 +42,7 @@ class BubbleGroup {
    * Update the bubble group
    * @param time currentTime
    */
-  public update(time: number): void {
+  public update(time: number, space: CanvasSpace): void {
     // if (time > 3000) debugger
     if (this.startTime === null || this.finalTime === null) {
       this.startTime = time
@@ -48,7 +50,7 @@ class BubbleGroup {
     }
 
     this.scale = Num.mapToRange(time, this.startTime, this.finalTime, 0, 1)
-    this.bubbles.forEach((bubble) => bubble.update(this.scale))
+    this.bubbles.forEach((bubble) => bubble.update(this.scale, space))
   }
 
   /**
