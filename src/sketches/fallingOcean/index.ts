@@ -1,25 +1,16 @@
-import {
-  CanvasSpace,
-  CanvasForm,
-  Circle,
-  Tempo,
-  Group,
-  Create,
-  Rectangle,
-  Bound,
-  Num,
-  Shaping,
-} from 'pts'
+import { CanvasSpace, CanvasForm, Tempo } from 'pts'
 import Sketch from '../sketch'
-import Bubble from './Bubble'
+import BubbleGroup from './BubbleGroup'
 import { COLORS } from './constants'
 
 class FallingOcean extends Sketch {
   protected space: CanvasSpace
   protected form: CanvasForm
+  private tempo: Tempo
 
   constructor() {
     super('Falling Ocean')
+    this.tempo = Tempo.fromBeat(100)
   }
 
   /**
@@ -36,50 +27,22 @@ class FallingOcean extends Sketch {
    * [drawBubbles description]
    */
   private drawBubbles(): void {
-    const tempo = Tempo.fromBeat(100)
-    const bubbleGroups: Bubble[][] = []
+    const BubbleGroups: Set<BubbleGroup> = new Set()
 
-    // Add a bubble group to the array
-    const addBubbleGroup = () => {
-      const boundingBox = Rectangle.fromCenter(this.space.pointer, 300)
-      const points = Create.distributeRandom(
-        Bound.fromGroup(boundingBox),
-        Num.randomRange(1, 6)
-      )
-
-      const bubbleGroup: Bubble[] = []
-
-      points.forEach((point) => {
-        bubbleGroup.push(new Bubble(point, Num.randomRange(5, 20)))
-      })
-      bubbleGroups.push(bubbleGroup)
-    }
-
-    // Trim off outdated bubble groups
-    const purgeBubbleGroups = () => {
-      while (bubbleGroups.length > 50) {
-        bubbleGroups.shift()
-      }
-    }
-
-    const every1 = tempo.every(1)
-    const every20 = tempo.every(20)
-
-    every1.start(() => {
-      addBubbleGroup()
-      purgeBubbleGroups()
+    this.tempo.every(1).start(() => {
+      BubbleGroups.add(new BubbleGroup(this.space.pointer))
     }, 0)
 
-    every20.progress((_count, t) => {
-      bubbleGroups.forEach((bubbleGroup) => {
-        bubbleGroup.forEach((bubble) => {
-          bubble.update(t)
-          bubble.render(this.form)
-        })
-      })
-    }, 0)
+    this.space.add((time) => {
+      BubbleGroups.forEach((bubbleGroup) => {
+        if (bubbleGroup.isFinished()) {
+          BubbleGroups.delete(bubbleGroup)
+        }
 
-    this.space.add(tempo)
+        bubbleGroup.update(time)
+        bubbleGroup.render(this.form)
+      })
+    })
   }
 
   /**
@@ -88,6 +51,7 @@ class FallingOcean extends Sketch {
   init(): void {
     this.addBackground()
     this.drawBubbles()
+    this.space.add(this.tempo)
   }
 }
 

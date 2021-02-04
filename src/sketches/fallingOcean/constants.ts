@@ -4,3 +4,6 @@ export const COLORS = {
   cyan: '#2CEEF0',
   tiffanyblue: '#B4F5F0',
 }
+
+export const BUBBLE_MIN = 5
+export const BUBBLE_MAX = 40

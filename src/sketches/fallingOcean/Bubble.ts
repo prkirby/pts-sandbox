@@ -1,14 +1,14 @@
 import { Num, Shaping } from 'pts'
 import type { Pt, CanvasForm } from 'pts'
 import Sketch from '../sketch'
-import { COLORS } from './constants'
+import { COLORS, BUBBLE_MIN, BUBBLE_MAX } from './constants'
 
 class Bubble {
+  private origin: Pt
   private center: Pt
   private size: number
-  private alphaScale: number
-  private startT: number | null
-  private endT: number | null
+  private alphaCycle = 0.0
+  private movement = 0.0
 
   /**
    * Creates a new Bubble
@@ -16,31 +16,27 @@ class Bubble {
    * @param size The radius of the bubble
    */
   constructor(pt: Pt, size: number) {
+    this.origin = pt.clone()
     this.center = pt
-    this.size = size
-    this.alphaScale = 0
-    this.startT = null
-    this.endT = null
+    this.size = size * 1.0
+    this.movement = 3000 / size
   }
 
-  /**
-   * Updates the bubble properties based on interpolation number
-   * @param t [A number from 0-1, as in the t value passed by Tempo.every.progress]
-   */
-  public update(t: number): void {
-    if (this.startT === null) {
-      this.startT = t
-      this.endT = t + 1
-    }
-
-    const currentT = 1 - Math.abs(t - this.startT)
-    this.alphaScale = Num.cycle(currentT, Shaping.cubicOut)
+  public update(scale: number): void {
+    this.alphaCycle = Num.cycle(scale, Shaping.exponentialOut)
+    // this.size = this.size * Num.mapToRange(Math.abs(1 - scale), 0, 1, 0.8, 1)
+    // if (scale > 0.5) debugger
+    // debugger
+    const originYOffset = this.origin.y + this.movement
+    const offset = Num.mapToRange(scale, 0, 1, this.origin.y, originYOffset)
+    this.center.y = offset
+    // this.center.y =
+    //   this.origin.y +
   }
 
   public render(form: CanvasForm): void {
-    const fillAlpha = Num.mapToRange(this.alphaScale, 0, 1, 0, 0.2)
-    const strokeAlpha = Num.mapToRange(this.alphaScale, 0, 1, 0, 0.6)
-
+    const fillAlpha = Num.mapToRange(this.alphaCycle, 0, 1, 0, 0.2)
+    const strokeAlpha = Num.mapToRange(this.alphaCycle, 0, 1, 0, 0.6)
     form
       .fill(Sketch.rgbaFromHex(COLORS.cyan, fillAlpha))
       .stroke(Sketch.rgbaFromHex(COLORS.cyan, strokeAlpha))
