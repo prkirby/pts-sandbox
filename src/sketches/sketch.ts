@@ -49,6 +49,16 @@ abstract class Sketch {
     } else {
       this.space.play()
     }
+
+    // Listen for keyboard actions
+    document.addEventListener('keydown', (e) => {
+      const { keyCode } = e
+      switch (keyCode) {
+        case 32: // Space Bar
+          this.space.pause(true) // Boolean true makes this act as a toggle
+          break
+      }
+    })
   }
 }
 

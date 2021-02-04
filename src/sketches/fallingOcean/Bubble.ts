@@ -21,16 +21,24 @@ class Bubble {
 
     this.desc = {
       magnitude: BUBBLE_MIN / size,
-      maxAlpha: 1 / (BUBBLE_MAX - size),
+      maxAlpha: 0.8 / (BUBBLE_MAX - size),
     }
   }
 
+  /**
+   * [update description]
+   * @param scale t value between 0 - 1
+   * @param space The space in which the bubble exists
+   */
   public update(scale: number, space: CanvasSpace): void {
-    this.alphaCycle = Shaping.elasticOut(scale)
+    // Fade over time
+    this.alphaCycle = Num.cycle(scale, Shaping.elasticOut)
+
+    // Shrink over time
     const sizeOffset = Num.mapToRange(Math.abs(1 - scale), 0, 1, 0.99, 1)
     this.size *= sizeOffset
 
-    // Move center towards 'light' source
+    // Move center towards 'light' source over time
     const pointerOpposite = space.pointer
       .clone()
       .rotate2D(Math.PI, space.center)
@@ -38,10 +46,13 @@ class Bubble {
     const newCenter = lineTowardsLight.interpolate(
       Num.mapToRange(this.desc.magnitude, 0, 1, 0.0001, 0.015)
     )
-
     this.center.to(newCenter)
   }
 
+  /**
+   * Renders the bubble
+   * @param form The form that will be doing the rendering
+   */
   public render(form: CanvasForm): void {
     const fillAlpha = Num.mapToRange(
       this.alphaCycle,
