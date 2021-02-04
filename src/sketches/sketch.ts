@@ -1,5 +1,5 @@
 import { CanvasSpace, Rectangle, Color } from 'pts'
-import type { Group, Form } from 'pts'
+import type { Group, Form, Space } from 'pts'
 
 abstract class Sketch {
   private id: string
@@ -14,7 +14,7 @@ abstract class Sketch {
     return el
   }
 
-  public static fullWidthRect(space: CanvasSpace): Group {
+  public static fullWidthRect(space: Space): Group {
     return Rectangle.from([0, 0], space.width, space.height)
   }
 

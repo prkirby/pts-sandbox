@@ -1,7 +1,7 @@
 import { Num, Shaping } from 'pts'
 import type { Pt, CanvasForm } from 'pts'
 import Sketch from '../sketch'
-import { COLORS, BUBBLE_MIN, BUBBLE_MAX } from './constants'
+import { COLORS } from './constants'
 
 class Bubble {
   private origin: Pt
