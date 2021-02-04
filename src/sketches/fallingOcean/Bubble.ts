@@ -1,8 +1,8 @@
 import { Num, Shaping, Circle, Group } from 'pts'
 import type { Pt, CanvasForm, CanvasSpace } from 'pts'
-import Sketch from '../sketch'
 import { COLORS, BUBBLE_MAX, BUBBLE_MIN } from './constants'
-import { PointDescription } from './Types'
+import { rgbaFromHex } from 'tools'
+import { PointDescription } from 'tools/types'
 
 class Bubble {
   private center: Pt
@@ -70,8 +70,8 @@ class Bubble {
     )
     const circle = Circle.fromCenter(this.center, this.size)
     form
-      .fill(Sketch.rgbaFromHex(COLORS.tiffanyblue, fillAlpha))
-      .stroke(Sketch.rgbaFromHex(COLORS.tiffanyblue, strokeAlpha))
+      .fill(rgbaFromHex(COLORS.tiffanyblue, fillAlpha))
+      .stroke(rgbaFromHex(COLORS.tiffanyblue, strokeAlpha))
       .composite('lighten')
       .circle(circle)
   }

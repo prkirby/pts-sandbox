@@ -1,5 +1,5 @@
-import { CanvasSpace, Rectangle, Color } from 'pts'
-import type { Group, Form, Space } from 'pts'
+import { CanvasSpace } from 'pts'
+import type { Form } from 'pts'
 
 abstract class Sketch {
   private id: string
@@ -12,16 +12,6 @@ abstract class Sketch {
     el.classList.add('canvasSpace')
     document.body.appendChild(el)
     return el
-  }
-
-  public static fullWidthRect(space: Space): Group {
-    return Rectangle.from([0, 0], space.width, space.height)
-  }
-
-  public static rgbaFromHex(hex: string, alpha: number): string {
-    const color = Color.fromHex(hex)
-    color.alpha = alpha
-    return color.rgba
   }
 
   constructor(id: string, playOnce = 0) {
@@ -39,10 +29,10 @@ abstract class Sketch {
   /**
    * Setup everything that needs to be done before space.play()
    */
-  abstract init(): void
+  abstract init(): Promise<boolean>
 
-  public run(): void {
-    this.init()
+  public async run(): Promise<boolean> {
+    await this.init()
     this.space.bindMouse().bindTouch()
     if (this.playOnce) {
       this.space.playOnce(this.playOnce)
@@ -52,13 +42,15 @@ abstract class Sketch {
 
     // Listen for keyboard actions
     document.addEventListener('keydown', (e) => {
-      const { keyCode } = e
-      switch (keyCode) {
-        case 32: // Space Bar
+      const { code } = e
+      switch (code) {
+        case 'Space': // Space Bar
           this.space.pause(true) // Boolean true makes this act as a toggle
           break
       }
     })
+
+    return true
   }
 }
 

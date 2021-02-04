@@ -8,15 +8,14 @@ import {
   Circle,
   Shaping,
   Rectangle,
-  Pt,
-  Geom,
   Sound,
 } from 'pts'
 import type { GroupLike } from 'pts'
 import Sketch from '../sketch'
 import BubbleGroup from './BubbleGroup'
 import { COLORS } from './constants'
-import { PointDescription } from './Types'
+import { fullWidthRect, rgbaFromHex } from 'tools'
+import { PointDescription } from 'tools/types'
 
 class FallingOcean extends Sketch {
   protected space: CanvasSpace
@@ -41,7 +40,7 @@ class FallingOcean extends Sketch {
     ])
 
     this.space.add((_time, _ftime, space) => {
-      const background = Sketch.fullWidthRect(space)
+      const background = fullWidthRect(space)
       this.form.fill(COLORS.darkblue).stroke(COLORS.darkblue).rect(background)
       const c1 = Circle.fromCenter(
         space.center,
@@ -78,7 +77,7 @@ class FallingOcean extends Sketch {
       },
       animate: (time, _ftime, space) => {
         const cycle = Num.cycle((time % 5000) / 5000, Shaping.sineInOut)
-        const bound = Bound.fromGroup(Sketch.fullWidthRect(space))
+        const bound = Bound.fromGroup(fullWidthRect(space))
 
         points.forEach((point, index) => {
           const desc = pointDescriptions[index]
@@ -90,7 +89,7 @@ class FallingOcean extends Sketch {
 
           this.form
             .fillOnly(
-              Sketch.rgbaFromHex(
+              rgbaFromHex(
                 COLORS.tiffanyblue,
                 Num.mapToRange(cycle, 0, 1, desc.minAlpha, desc.maxAlpha)
               )
@@ -115,7 +114,7 @@ class FallingOcean extends Sketch {
         freqDomain = freqDomain.slice(1, 8)
         const freqAverage =
           freqDomain.reduce((a, b) => a + b) / freqDomain.length
-        audioScale = Num.mapToRange(freqAverage, 0, 160, 0, 1)
+        audioScale = Num.mapToRange(freqAverage, 0, 180, 0, 1)
       }
 
       if (Math.random() < audioScale)
@@ -145,22 +144,24 @@ class FallingOcean extends Sketch {
    * [connectMicrophone description]
    * @return [description]
    */
-  private connectMicrophone(): void {
+  private async connectMicrophone(): Promise<boolean> {
     Sound.input().then((micInput) => {
       micInput.analyze(32, -70, -20)
       this.micInput = micInput
+      return true
     })
+    return false
   }
 
   /**
    * Init Falling Ocean
    */
-  init(): void {
+  async init(): Promise<boolean> {
     this.addBackground()
     this.addBackgroundParticles()
     this.drawBubbles()
     this.space.add(this.tempo)
-    this.connectMicrophone()
+    return this.connectMicrophone()
   }
 }
 
