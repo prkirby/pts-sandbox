@@ -110,10 +110,12 @@ class FallingOcean extends Sketch {
     this.tempo.every(1).progress(() => {
       let audioScale = 0.2 // Default audio scale if no input
       if (this.micInput) {
-        const freqDomain = this.micInput.freqDomain()
+        let freqDomain = this.micInput.freqDomain()
+        // Cut out low and high banks
+        freqDomain = freqDomain.slice(1, 8)
         const freqAverage =
           freqDomain.reduce((a, b) => a + b) / freqDomain.length
-        audioScale = Num.mapToRange(freqAverage, 0, 80, 0, 1)
+        audioScale = Num.mapToRange(freqAverage, 0, 160, 0, 1)
       }
 
       if (Math.random() < audioScale)
@@ -145,7 +147,7 @@ class FallingOcean extends Sketch {
    */
   private connectMicrophone(): void {
     Sound.input().then((micInput) => {
-      micInput.analyze(32, -70, -30)
+      micInput.analyze(32, -70, -20)
       this.micInput = micInput
     })
   }
