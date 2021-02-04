@@ -6,4 +6,4 @@ export const COLORS = {
 }
 
 export const BUBBLE_MIN = 5
-export const BUBBLE_MAX = 60
+export const BUBBLE_MAX = 120

@@ -12,21 +12,36 @@ class BubbleGroup {
   private scale = 0
   private space: CanvasSpace
 
-  constructor(pointer: Pt, space?: CanvasSpace, renderTime = 4000) {
+  constructor(
+    pointer: Pt,
+    space: CanvasSpace,
+    audioScale: number,
+    renderTime?: number
+  ) {
     this.pointer = pointer
-    this.renderTime = renderTime
+    this.renderTime = renderTime || 3000
     this.space = space
 
-    const boundingBox = Rectangle.fromCenter(this.pointer, 600)
+    const boundingBoxSize = Num.mapToRange(audioScale, 0, 1, 80, 800)
+    const boundingBox = Rectangle.fromCenter(this.pointer, boundingBoxSize)
+    const minBubbles = Num.mapToRange(audioScale, 0, 1, 0, 1)
+    const maxBubbles = Num.mapToRange(audioScale, 0, 1, 1, 4)
     const points = Create.distributeRandom(
       Bound.fromGroup(boundingBox),
-      Num.randomRange(0, 6)
+      Num.randomRange(minBubbles, maxBubbles)
     )
 
+    const minSize = Num.mapToRange(
+      audioScale,
+      0,
+      1,
+      BUBBLE_MIN,
+      BUBBLE_MIN + 20
+    )
+    const maxSize = Num.mapToRange(audioScale, 0, 1, minSize, BUBBLE_MAX)
+
     points.forEach((point) => {
-      this.bubbles.push(
-        new Bubble(point, Num.randomRange(BUBBLE_MIN, BUBBLE_MAX))
-      )
+      this.bubbles.push(new Bubble(point, Num.randomRange(minSize, maxSize)))
     })
   }
 
@@ -42,15 +57,14 @@ class BubbleGroup {
    * Update the bubble group
    * @param time currentTime
    */
-  public update(time: number, space: CanvasSpace): void {
-    // if (time > 3000) debugger
+  public update(time: number): void {
     if (this.startTime === null || this.finalTime === null) {
       this.startTime = time
       this.finalTime = this.startTime + this.renderTime
     }
 
     this.scale = Num.mapToRange(time, this.startTime, this.finalTime, 0, 1)
-    this.bubbles.forEach((bubble) => bubble.update(this.scale, space))
+    this.bubbles.forEach((bubble) => bubble.update(this.scale, this.space))
   }
 
   /**

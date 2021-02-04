@@ -10,6 +10,7 @@ import {
   Rectangle,
   Pt,
   Geom,
+  Sound,
 } from 'pts'
 import type { GroupLike } from 'pts'
 import Sketch from '../sketch'
@@ -21,10 +22,11 @@ class FallingOcean extends Sketch {
   protected space: CanvasSpace
   protected form: CanvasForm
   private tempo: Tempo
+  private micInput: Sound
 
   constructor() {
     super('Falling Ocean')
-    this.tempo = Tempo.fromBeat(100)
+    this.tempo = Tempo.fromBeat(50)
   }
 
   /**
@@ -74,7 +76,7 @@ class FallingOcean extends Sketch {
           })
         })
       },
-      animate: (time, ftime, space) => {
+      animate: (time, _ftime, space) => {
         const cycle = Num.cycle((time % 5000) / 5000, Shaping.sineInOut)
         const bound = Bound.fromGroup(Sketch.fullWidthRect(space))
 
@@ -103,21 +105,48 @@ class FallingOcean extends Sketch {
    * Add the bubbles
    */
   private drawBubbles(): void {
-    const BubbleGroups: Set<BubbleGroup> = new Set()
+    const bubbleGroups: BubbleGroup[] = []
 
-    this.tempo.every(3).start(() => {
-      BubbleGroups.add(new BubbleGroup(this.space.pointer))
+    this.tempo.every(1).progress(() => {
+      let audioScale = 0.2 // Default audio scale if no input
+      if (this.micInput) {
+        const freqDomain = this.micInput.freqDomain()
+        const freqAverage =
+          freqDomain.reduce((a, b) => a + b) / freqDomain.length
+        audioScale = Num.mapToRange(freqAverage, 0, 80, 0, 1)
+      }
+
+      if (Math.random() < audioScale)
+        bubbleGroups.push(
+          new BubbleGroup(this.space.pointer, this.space, audioScale)
+        )
     }, 0)
 
-    this.space.add((time, _ftime, space) => {
-      BubbleGroups.forEach((bubbleGroup) => {
-        if (bubbleGroup.isFinished()) {
-          BubbleGroups.delete(bubbleGroup)
+    this.space.add((time) => {
+      // Reverse bubble group to have it act like a stack
+      // Run through bubble groups backwards, chopping down to maximum number of
+      // elements, and removing those that are already finished. Otherwise,
+      // Update and render
+      const revBubbleGroup = [...bubbleGroups].reverse()
+      for (let i = revBubbleGroup.length - 1; i > 0; --i) {
+        if (revBubbleGroup[i].isFinished() || revBubbleGroup.length > 32) {
+          revBubbleGroup.splice(i, 1)
+        } else {
+          revBubbleGroup[i].update(time)
+          revBubbleGroup[i].render(this.form)
         }
+      }
+    })
+  }
 
-        bubbleGroup.update(time, space)
-        bubbleGroup.render(this.form)
-      })
+  /**
+   * [connectMicrophone description]
+   * @return [description]
+   */
+  private connectMicrophone(): void {
+    Sound.input().then((micInput) => {
+      micInput.analyze(32, -70, -30)
+      this.micInput = micInput
     })
   }
 
@@ -129,6 +158,7 @@ class FallingOcean extends Sketch {
     this.addBackgroundParticles()
     this.drawBubbles()
     this.space.add(this.tempo)
+    this.connectMicrophone()
   }
 }
 
