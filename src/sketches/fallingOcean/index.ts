@@ -1,21 +1,8 @@
-import {
-  CanvasSpace,
-  CanvasForm,
-  Tempo,
-  Num,
-  Create,
-  Bound,
-  Circle,
-  Shaping,
-  Rectangle,
-  Sound,
-} from 'pts'
-import type { GroupLike } from 'pts'
+import { CanvasSpace, CanvasForm, Tempo, Num, Circle, Sound } from 'pts'
 import Sketch from '../sketch'
 import BubbleGroup from './BubbleGroup'
 import { COLORS } from './constants'
-import { fullWidthRect, rgbaFromHex } from 'tools'
-import { PointDescription } from 'tools/types'
+import { backgroundParticles, solidBackground } from 'tools'
 
 class FallingOcean extends Sketch {
   protected space: CanvasSpace
@@ -32,6 +19,7 @@ class FallingOcean extends Sketch {
    * Add the ocean background
    */
   private addBackground(): void {
+    solidBackground(this.space, this.form, COLORS.black)
     const gradient = this.form.gradient([
       [0.5, '#000'],
       [0.92, COLORS.darkblue],
@@ -40,8 +28,6 @@ class FallingOcean extends Sketch {
     ])
 
     this.space.add((_time, _ftime, space) => {
-      const background = fullWidthRect(space)
-      this.form.fill(COLORS.darkblue).stroke(COLORS.darkblue).rect(background)
       const c1 = Circle.fromCenter(
         space.center,
         Math.max(space.width, space.height)
@@ -51,52 +37,6 @@ class FallingOcean extends Sketch {
         .rotate2D(Math.PI, space.center)
       const c2 = Circle.fromCenter(oppositePointer, 2)
       this.form.fill(gradient(c1, c2)).circle(c1)
-    })
-  }
-
-  /**
-   * Adds background particles
-   */
-  private addBackgroundParticles(): void {
-    let points: GroupLike
-
-    const pointDescriptions: PointDescription[] = []
-
-    this.space.add({
-      start: (bound) => {
-        points = Create.distributeRandom(bound, Num.randomRange(80, 200))
-
-        points.forEach(() => {
-          pointDescriptions.push({
-            angle: Num.randomRange(0, 2 * Math.PI),
-            magnitude: Num.randomRange(0.1, 0.8),
-            minAlpha: Num.randomRange(0, 0.4),
-            maxAlpha: Num.randomRange(0.4, 0.8),
-          })
-        })
-      },
-      animate: (time, _ftime, space) => {
-        const cycle = Num.cycle((time % 5000) / 5000, Shaping.sineInOut)
-        const bound = Bound.fromGroup(fullWidthRect(space))
-
-        points.forEach((point, index) => {
-          const desc = pointDescriptions[index]
-          point.toAngle(desc.angle, desc.magnitude, true)
-          // If point is outside of bound, move it to random point within bound
-          if (!Rectangle.withinBound(bound, point)) {
-            point.to(Create.distributeRandom(bound, 1)[0])
-          }
-
-          this.form
-            .fillOnly(
-              rgbaFromHex(
-                COLORS.tiffanyblue,
-                Num.mapToRange(cycle, 0, 1, desc.minAlpha, desc.maxAlpha)
-              )
-            )
-            .point(point, 1, 'circle')
-        })
-      },
     })
   }
 
@@ -158,7 +98,7 @@ class FallingOcean extends Sketch {
    */
   async init(): Promise<boolean> {
     this.addBackground()
-    this.addBackgroundParticles()
+    backgroundParticles(this.space, this.form, COLORS.tiffanyblue)
     this.drawBubbles()
     this.space.add(this.tempo)
     return this.connectMicrophone()

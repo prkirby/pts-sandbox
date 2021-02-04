@@ -1,9 +1,13 @@
 import { Create, Num, Bound, Rectangle, Shaping } from 'pts'
-import type { GroupLike, CanvasSpace } from 'pts'
+import type { GroupLike, CanvasSpace, CanvasForm } from 'pts'
 import type { PointDescription } from './types'
 import { fullWidthRect, rgbaFromHex } from './'
 
-export function backgroundParticles(space: CanvasSpace, color: string): void {
+export function backgroundParticles(
+  space: CanvasSpace,
+  form: CanvasForm,
+  color: string
+): void {
   let points: GroupLike
 
   const pointDescriptions: PointDescription[] = []
@@ -33,7 +37,7 @@ export function backgroundParticles(space: CanvasSpace, color: string): void {
           point.to(Create.distributeRandom(bound, 1)[0])
         }
 
-        this.form
+        form
           .fillOnly(
             rgbaFromHex(
               color,
