@@ -13,4 +13,5 @@ export const INTRO_TEXT = [
   'Talk, or yell, into the void',
   'Spacebar will pause',
   'FALLING OCEAN',
+  'Music: Restless States by Daniel Birch',
 ]
