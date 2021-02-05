@@ -88,9 +88,6 @@ class FallingOcean extends Sketch {
    * @return [description]
    */
   private connectMicrophone(): void {
-    navigator.mediaDevices.enumerateDevices().then((e) => {
-      console.log('audioDevices', e)
-    })
     Sound.input({ audio: true }).then((micInput) => {
       this.micInput = micInput
       this.micInput.analyze(32, -50, -30)
@@ -98,7 +95,6 @@ class FallingOcean extends Sketch {
       if (this.micInput.ctx.state === 'suspended') {
         this.micInput.ctx.resume()
       }
-      console.log(micInput)
     })
   }
 
@@ -106,13 +102,16 @@ class FallingOcean extends Sketch {
     Sound.load(SONG).then((song) => {
       const ctx = song.ctx
       const gainNode = ctx.createGain()
+
       song.connect(gainNode)
+      song.setOutputNode(gainNode)
       gainNode.gain.value = 0.2
-      ctx.resume().then(() => {
-        song.start()
-        song.node.disconnect(ctx.destination)
-        gainNode.connect(ctx.destination)
-      })
+
+      song.start()
+      const _global = (window /* browser */ || global) /* node */ as any
+      _global.song = song
+      // song._outputNode.connect(song.ctx.destination)
+      console.log('%c ' + song.ctx.state, 'color: green')
       this.song = song
       this.gainNode = gainNode
     })
@@ -120,13 +119,9 @@ class FallingOcean extends Sketch {
 
   protected onPause(): void {
     if (this.song.playing) {
-      this.song.start()
       this.song.stop()
-      this.gainNode.disconnect(this.song.ctx.destination)
     } else {
       this.song.start()
-      this.song.node.disconnect(this.song.ctx.destination)
-      this.gainNode.connect(this.song.ctx.destination)
     }
   }
 
