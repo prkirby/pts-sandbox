@@ -24,7 +24,7 @@ class FallingOcean extends Sketch {
   private addBackground(): void {
     solidBackground(this.space, this.form, COLORS.black)
 
-    const SINKING_TIME = 75 * 1000
+    const SINKING_TIME = 120 * 1000
     this.space.add((time, _ftime, space) => {
       let scale = time / SINKING_TIME
 
