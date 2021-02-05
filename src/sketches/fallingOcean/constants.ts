@@ -8,3 +8,9 @@ export const COLORS = {
 
 export const BUBBLE_MIN = 5
 export const BUBBLE_MAX = 120
+
+export const INTRO_TEXT = [
+  'Talk, or yell, into the void',
+  'Spacebar will pause',
+  'FALLING OCEAN',
+]

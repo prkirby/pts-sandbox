@@ -1,8 +1,8 @@
-import { CanvasSpace, CanvasForm, Tempo, Num, Circle, Sound } from 'pts'
+import { CanvasSpace, CanvasForm, Tempo, Num, Circle, Sound, Font } from 'pts'
 import Sketch from '../sketch'
 import BubbleGroup from './BubbleGroup'
-import { COLORS } from './constants'
-import { backgroundParticles, solidBackground } from 'tools'
+import { COLORS, INTRO_TEXT } from './constants'
+import { backgroundParticles, solidBackground, rgbaFromHex } from 'tools'
 import SONG from './daniel_birch_restless_states_constrained_desire_2.mp3'
 
 class FallingOcean extends Sketch {
@@ -84,6 +84,40 @@ class FallingOcean extends Sketch {
   }
 
   /**
+   * [drawText description]
+   */
+  private drawText(): void {
+    const font = new Font(80, 'Montserrat, Helvetica, sans-serif')
+    const textTempo = this.tempo.every(120)
+    let text = INTRO_TEXT[0]
+
+    textTempo.start((count) => {
+      text = INTRO_TEXT[count]
+      console.log(text)
+      if (count >= INTRO_TEXT.length) {
+        return true
+      }
+    }, 0)
+
+    textTempo.progress((count, t) => {
+      const y = Num.mapToRange(
+        1 - t,
+        0,
+        1,
+        this.space.height - 60,
+        this.space.height - 200
+      )
+      const position = [60, y]
+      const alpha = Num.cycle(t)
+      const color = rgbaFromHex('#fff', alpha)
+      this.form.fill(color).stroke(color).font(font).text(position, text)
+      if (count >= INTRO_TEXT.length) {
+        return true
+      }
+    }, 0)
+  }
+
+  /**
    * [connectMicrophone description]
    * @return [description]
    */
@@ -98,6 +132,9 @@ class FallingOcean extends Sketch {
     })
   }
 
+  /**
+   * [loadAudio description]
+   */
   private loadAudio(): void {
     Sound.load(SONG).then((song) => {
       const ctx = song.ctx
@@ -105,18 +142,18 @@ class FallingOcean extends Sketch {
 
       song.connect(gainNode)
       song.setOutputNode(gainNode)
-      gainNode.gain.value = 0.2
+      gainNode.gain.value = 0.1
 
       song.start()
-      const _global = (window /* browser */ || global) /* node */ as any
-      _global.song = song
-      // song._outputNode.connect(song.ctx.destination)
-      console.log('%c ' + song.ctx.state, 'color: green')
+
       this.song = song
       this.gainNode = gainNode
     })
   }
 
+  /**
+   * [onPause description]
+   */
   protected onPause(): void {
     if (this.song.playing) {
       this.song.stop()
@@ -135,6 +172,7 @@ class FallingOcean extends Sketch {
     backgroundParticles(this.space, this.form, COLORS.tiffanyblue)
     this.drawBubbles()
     this.space.add(this.tempo)
+    this.drawText()
   }
 }
 
