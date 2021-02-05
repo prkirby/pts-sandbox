@@ -29,7 +29,7 @@ abstract class Sketch {
   /**
    * Setup everything that needs to be done before space.play()
    */
-  abstract init(): Promise<boolean>
+  protected abstract init(): void
 
   /**
    * Handle all side effects on pause
@@ -37,7 +37,7 @@ abstract class Sketch {
   protected abstract onPause(): void
 
   public async run(): Promise<boolean> {
-    await this.init()
+    this.init()
     this.space.bindMouse().bindTouch()
     if (this.playOnce) {
       this.space.playOnce(this.playOnce)
