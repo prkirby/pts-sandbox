@@ -178,7 +178,7 @@ class FallingOcean extends Sketch {
    */
   protected init(): void {
     this.connectMicrophone()
-    // this.loadAudio()
+    this.loadAudio()
     this.addBackground()
     new BackgroundParticles(
       this.space,
