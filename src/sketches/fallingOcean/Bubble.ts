@@ -1,27 +1,29 @@
 import { Num, Shaping, Circle, Group } from 'pts'
 import type { Pt, CanvasForm, CanvasSpace } from 'pts'
-import { COLORS, BUBBLE_MAX, BUBBLE_MIN } from './constants'
+import { BUBBLE_MAX, BUBBLE_MIN } from './constants'
 import { rgbaFromHex } from 'tools'
-import { PointDescription } from 'tools/types'
+import { PointDescription, ColorPack } from 'types'
 
 class Bubble {
   private center: Pt
   private size: number
   private alphaCycle = 0.0
   private desc: PointDescription
+  private color: ColorPack
 
   /**
    * Creates a new Bubble
    * @param pt   Center point for bubble
    * @param size The radius of the bubble
    */
-  constructor(pt: Pt, size: number) {
+  constructor(pt: Pt, size: number, color: ColorPack) {
     this.center = pt
     this.size = size
+    this.color = color
 
     this.desc = {
       magnitude: BUBBLE_MIN / size,
-      maxAlpha: 0.8 / (BUBBLE_MAX - size),
+      maxAlpha: 1 / (BUBBLE_MAX - size),
     }
   }
 
@@ -53,7 +55,7 @@ class Bubble {
    * Renders the bubble
    * @param form The form that will be doing the rendering
    */
-  public render(form: CanvasForm): void {
+  public render(form: CanvasForm, mode: string): void {
     const fillAlpha = Num.mapToRange(
       this.alphaCycle,
       0,
@@ -70,9 +72,9 @@ class Bubble {
     )
     const circle = Circle.fromCenter(this.center, this.size)
     form
-      .fill(rgbaFromHex(COLORS.tiffanyblue, fillAlpha))
-      .stroke(rgbaFromHex(COLORS.tiffanyblue, strokeAlpha))
-      .composite('lighten')
+      .fill(rgbaFromHex(this.color.fill, fillAlpha))
+      .stroke(rgbaFromHex(this.color.stroke, strokeAlpha), 5)
+      .composite(mode)
       .circle(circle)
   }
 }

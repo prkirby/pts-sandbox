@@ -4,3 +4,8 @@ export interface PointDescription {
   minAlpha?: number
   maxAlpha?: number
 }
+
+export interface ColorPack {
+  fill: string
+  stroke: string
+}

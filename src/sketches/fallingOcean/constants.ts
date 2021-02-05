@@ -9,9 +9,11 @@ export const COLORS = {
 export const BUBBLE_MIN = 5
 export const BUBBLE_MAX = 120
 
+//'Talk, or yell, into the void',
 export const INTRO_TEXT = [
-  'Talk, or yell, into the void',
-  'Spacebar will pause',
   'FALLING OCEAN',
+  'Talk (or yell) into the void',
   'Music: Restless States by Daniel Birch',
+  'Press spacebar to pause',
+  'Microphone access required to work',
 ]

@@ -24,7 +24,7 @@ class FallingOcean extends Sketch {
   private addBackground(): void {
     solidBackground(this.space, this.form, COLORS.black)
 
-    const SINKING_TIME = 90 * 1000
+    const SINKING_TIME = 75 * 1000
     this.space.add((time, _ftime, space) => {
       let scale = time / SINKING_TIME
 
@@ -67,7 +67,13 @@ class FallingOcean extends Sketch {
         // Create bubbles more frequently, the louder the input
         if (Math.random() < audioScale)
           bubbleGroups.push(
-            new BubbleGroup(this.space.pointer, this.space, audioScale)
+            new BubbleGroup(
+              this.space.pointer,
+              this.space,
+              audioScale,
+              'exclusion',
+              { fill: COLORS.bluegrotto, stroke: COLORS.cyan }
+            )
           )
       }
     }, 0)
@@ -94,15 +100,16 @@ class FallingOcean extends Sketch {
    */
   private drawText(): void {
     const font = new Font(80, 'Montserrat, Helvetica, sans-serif')
-    const textTempo = this.tempo.every(120)
+    const textTempo = this.tempo.every(100)
     let text = INTRO_TEXT[0]
 
     textTempo.start((count) => {
       text = INTRO_TEXT[count]
       console.log(text)
-      if (count >= INTRO_TEXT.length) {
-        return true
+      if (count > 1) {
+        font.size = 28
       }
+      if (count >= INTRO_TEXT.length) return true
     }, 0)
 
     textTempo.progress((count, t) => {
@@ -111,15 +118,13 @@ class FallingOcean extends Sketch {
         0,
         1,
         this.space.height - 60,
-        this.space.height - 200
+        this.space.height - 120
       )
       const position = [60, y]
       const alpha = Num.cycle(t)
       const color = rgbaFromHex('#fff', alpha)
       this.form.fill(color).stroke(color).font(font).text(position, text)
-      if (count >= INTRO_TEXT.length) {
-        return true
-      }
+      if (count >= INTRO_TEXT.length) return true
     }, 0)
   }
 

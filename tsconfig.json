@@ -11,8 +11,7 @@
     "paths": {
       "tools": ["./src/tools/"],
       "sketches": ["./src/sketches/"],
-      "tools/*": ["./src/tools/*"],
-      "sketches/*": ["./src/sketches/*"]
+      "types": ["./src/types/"]
     }
   }
 }

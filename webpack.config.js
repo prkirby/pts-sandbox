@@ -53,6 +53,7 @@ module.exports = {
     alias: {
       tools: path.resolve(__dirname, './src/tools/'),
       sketches: path.resolve(__dirname, './src/sketches/'),
+      types: path.resolve(__dirname, './src/types/'),
     },
   },
   output: {
