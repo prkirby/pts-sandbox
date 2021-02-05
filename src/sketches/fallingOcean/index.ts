@@ -2,7 +2,7 @@ import { CanvasSpace, CanvasForm, Tempo, Num, Circle, Sound, Font } from 'pts'
 import Sketch from '../sketch'
 import BubbleGroup from './BubbleGroup'
 import { COLORS, INTRO_TEXT } from './constants'
-import { backgroundParticles, solidBackground, rgbaFromHex } from 'tools'
+import { BackgroundParticles, solidBackground, rgbaFromHex } from 'tools'
 import SONG from './daniel_birch_restless_states_constrained_desire_2.mp3'
 
 class FallingOcean extends Sketch {
@@ -23,14 +23,20 @@ class FallingOcean extends Sketch {
    */
   private addBackground(): void {
     solidBackground(this.space, this.form, COLORS.black)
-    const gradient = this.form.gradient([
-      [0.5, '#000'],
-      [0.92, COLORS.darkblue],
-      [0.98, COLORS.bluegrotto],
-      [1, COLORS.cyan],
-    ])
 
-    this.space.add((_time, _ftime, space) => {
+    const SINKING_TIME = 90 * 1000
+    this.space.add((time, _ftime, space) => {
+      let scale = time / SINKING_TIME
+
+      if (scale > 0.8) scale = 0.8 // end animation if past SINKING_TIME
+
+      const gradient = this.form.gradient([
+        [Num.mapToRange(scale, 0, 1, 0.3, 0.92), COLORS.black],
+        [Num.mapToRange(scale, 0, 1, 0.8, 0.99), COLORS.darkblue],
+        [Num.mapToRange(scale, 0, 1, 0.92, 1), COLORS.bluegrotto],
+        [1, COLORS.cyan],
+      ])
+
       const c1 = Circle.fromCenter(
         space.center,
         Math.max(space.width, space.height)
@@ -167,9 +173,14 @@ class FallingOcean extends Sketch {
    */
   protected init(): void {
     this.connectMicrophone()
-    this.loadAudio()
+    // this.loadAudio()
     this.addBackground()
-    backgroundParticles(this.space, this.form, COLORS.tiffanyblue)
+    new BackgroundParticles(
+      this.space,
+      this.form,
+      COLORS.tiffanyblue,
+      'color-dodge'
+    ).run()
     this.drawBubbles()
     this.space.add(this.tempo)
     this.drawText()
