@@ -1,7 +1,8 @@
 {
-  "name": "ptsjs-playground",
+  "name": "@prkirby/pts-sandbox",
   "version": "1.0.0",
-  "description": "",
+  "description": "A sandbox to create tools, test ideas, and create sketches using PtsJS",
+  "repository": "git://github.com/prkrby/pts-sandbox.git",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
