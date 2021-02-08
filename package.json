@@ -2,7 +2,7 @@
   "name": "@prkirby/pts-sandbox",
   "version": "1.0.0",
   "description": "A sandbox to create tools, test ideas, and create sketches using PtsJS",
-  "repository": "git://github.com/prkrby/pts-sandbox.git",
+  "repository": "git://github.com/prkirby/pts-sandbox.git",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch",
