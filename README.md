@@ -1,6 +1,6 @@
-# pts.js Generative Playground
+# pts.js Sandbox
 
-A place for me to test out ideas and quickly play around
+A sandbox to create tools, test ideas, and create sketches using PtsJS
 
 - [Docs](https://ptsjs.org/docs/)
 - [Demos](https://ptsjs.org/demo/)
