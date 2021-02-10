@@ -1,5 +1,0 @@
-export { BackgroundParticles } from './BackgroundParticles'
-export { fullWidthRect } from './fullWidthRect'
-export { rgbaFromHex } from './rgbaFromHex'
-export { solidBackground } from './solidBackground'
-export { CompositeSwitcher } from './CompositeSwitcher'
