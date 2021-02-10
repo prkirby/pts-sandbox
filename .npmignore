@@ -1,0 +1,13 @@
+.vercel
+.yalc
+dist/index.html
+node_modules
+src
+.eslintrc
+.npmrc
+tsconfig.json
+webpack.*
+yalc.*
+yarn.lock
+yarn-error.log
+

@@ -7,14 +7,18 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch",
     "start": "webpack serve --open",
-    "build": "webpack"
+    "build": "webpack --config webpack.config.js && webpack --config webpack.mod.js"
   },
   "author": "",
   "license": "ISC",
+  "files": [
+    "dist/**/*",
+    "src/**/*"
+  ],
   "dependencies": {
     "yalc": "^1.0.0-pre.50"
   },
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "devDependencies": {
     "@babel/core": "^7.12.13",
     "@babel/eslint-parser": "^7.12.13",
