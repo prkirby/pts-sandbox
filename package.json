@@ -1,9 +1,10 @@
 {
   "name": "@prkirby/pts-sandbox",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A sandbox to create tools, test ideas, and create sketches using PtsJS",
   "repository": "git://github.com/prkirby/pts-sandbox.git",
-  "main": "lib/index.js",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
   "files": [
     "lib/"
   ],
@@ -12,8 +13,9 @@
     "watch": "webpack --watch",
     "start": "webpack serve --open",
     "clean": "rm -rf dist lib",
-    "build": "npm run clean && tsc && npm run copy:assets",
-    "copy:assets": "cp -R src/assets lib/assets",
+    "tsc": "tsc -p tsconfig-cjs.json && tsc -p tsconfig.json",
+    "build": "npm run clean && npm run tsc && npm run copy:assets",
+    "copy:assets": "cp -R src/assets lib/cjs/assets && cp -R src/assets lib/esm/assets",
     "prepack": "npm run build"
   },
   "author": "",
