@@ -1,6 +1,5 @@
 {
   "include": ["src"],
-  "exclude": ["src/index.ts"],
   "compilerOptions": {
     "outDir": "lib",
     "sourceMap": true,
