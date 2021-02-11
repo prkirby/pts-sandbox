@@ -21,8 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "yalc": "^1.0.0-pre.50",
-    "pts": "file:.yalc/pts"
+    "pts": "^0.9.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",
