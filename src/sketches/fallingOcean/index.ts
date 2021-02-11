@@ -148,17 +148,18 @@ export class FallingOcean extends Sketch {
    */
   private loadAudio(): void {
     Sound.load(SONG).then((song) => {
-      const ctx = song.ctx
-      const gainNode = ctx.createGain()
+      // NOTE: come back to this when new pts version is published
+      // const ctx = song.ctx
+      // const gainNode = ctx.createGain()
 
-      song.connect(gainNode)
-      song.setOutputNode(gainNode)
-      gainNode.gain.value = 0.1
+      // song.connect(gainNode)
+      // song.setOutputNode(gainNode)
+      // gainNode.gain.value = 0.1
 
       song.start()
 
       this.song = song
-      this.gainNode = gainNode
+      // this.gainNode = gainNode
     })
   }
 
