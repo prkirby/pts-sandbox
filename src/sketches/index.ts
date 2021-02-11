@@ -1,1 +1,1 @@
-export {FallingOcean} from './FallingOcean'
+export { FallingOcean } from './FallingOcean'

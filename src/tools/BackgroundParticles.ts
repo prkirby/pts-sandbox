@@ -1,6 +1,6 @@
 import { Create, Num, Bound, Rectangle, Shaping } from 'pts'
 import type { GroupLike, CanvasSpace, CanvasForm } from 'pts'
-import type { PointDescription } from 'types'
+import type { PointDescription } from '../types'
 import { fullWidthRect, rgbaFromHex } from './'
 
 export class BackgroundParticles {

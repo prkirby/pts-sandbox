@@ -2,7 +2,7 @@ import { Rectangle, Create, Num, Bound } from 'pts'
 import type { Pt, CanvasForm, CanvasSpace } from 'pts'
 import Bubble from './Bubble'
 import { BUBBLE_MIN, BUBBLE_MAX } from './constants'
-import { ColorPack } from 'types'
+import { ColorPack } from '../../types'
 
 class BubbleGroup {
   private bubbles: Bubble[] = []

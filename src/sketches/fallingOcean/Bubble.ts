@@ -1,8 +1,8 @@
 import { Num, Shaping, Circle, Group } from 'pts'
 import type { Pt, CanvasForm, CanvasSpace } from 'pts'
 import { BUBBLE_MAX, BUBBLE_MIN } from './constants'
-import { rgbaFromHex } from 'tools'
-import { PointDescription, ColorPack } from 'types'
+import { rgbaFromHex } from '../../tools'
+import { PointDescription, ColorPack } from '../../types'
 
 class Bubble {
   private center: Pt
