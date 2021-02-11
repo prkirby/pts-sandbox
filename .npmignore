@@ -1,6 +1,6 @@
 .vercel
 .yalc
-dist/index.html
+dist
 node_modules
 src
 .eslintrc

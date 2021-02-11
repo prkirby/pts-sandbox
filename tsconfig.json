@@ -1,11 +1,15 @@
 {
+  "include": ["src"],
+  "exclude": ["src/index.ts"],
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "lib",
     "sourceMap": true,
+    "declaration": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "module": "es6",
+    "module": "commonjs",
     "target": "es5",
+    "lib": ["ES2015", "DOM"],
     "jsx": "react",
     "allowJs": true,
     "paths": {

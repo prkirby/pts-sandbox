@@ -7,18 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch",
     "start": "webpack serve --open",
-    "build": "webpack --config webpack.config.js && webpack --config webpack.mod.js"
+    "clean": "rm -rf dist lib",
+    "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && npm run copy:assets",
+    "copy:assets": "cp -R src/assets lib/assets & cp -R src/assets lib-esm/assets",
+    "prepack": "npm run build"
   },
   "author": "",
   "license": "ISC",
-  "files": [
-    "dist/**/*",
-    "src/**/*"
-  ],
   "dependencies": {
     "yalc": "^1.0.0-pre.50"
   },
-  "main": "dist/index.js",
   "devDependencies": {
     "@babel/core": "^7.12.13",
     "@babel/eslint-parser": "^7.12.13",

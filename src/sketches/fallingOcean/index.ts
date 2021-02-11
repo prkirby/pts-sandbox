@@ -3,7 +3,7 @@ import Sketch from '../sketch'
 import BubbleGroup from './BubbleGroup'
 import { COLORS, INTRO_TEXT } from './constants'
 import { BackgroundParticles, solidBackground, rgbaFromHex } from 'tools'
-import SONG from './daniel_birch_restless_states_constrained_desire_2.mp3'
+import SONG from '../../assets/daniel_birch_restless_states_constrained_desire_2.mp3'
 
 export class FallingOcean extends Sketch {
   protected space: CanvasSpace
