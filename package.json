@@ -1,6 +1,6 @@
 {
   "name": "@prkirby/pts-sandbox",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "A sandbox to create tools, test ideas, and create sketches using PtsJS",
   "repository": "git://github.com/prkirby/pts-sandbox.git",
   "main": "./lib/cjs/index.js",
