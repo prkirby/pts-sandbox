@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { PtsCanvas } from '../sketch'
+import { PtsCanvas } from '../PtsCanvas'
 import {
   CanvasSpace,
   Tempo,
@@ -188,7 +188,7 @@ export const FallingOcean: React.FC = () => {
 
   const handleStart = (bound: Bound, space: CanvasSpace, form: CanvasForm) => {
     connectMicrophone()
-    // loadAudio()
+    loadAudio()
     backgroundParticlesRef.current = new BackgroundParticles(
       bound,
       COLORS.tiffanyblue,

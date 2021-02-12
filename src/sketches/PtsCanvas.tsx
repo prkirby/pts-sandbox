@@ -8,8 +8,8 @@ export interface PtsCanvasProps {
   retina?: boolean
   play?: boolean
   touch?: boolean
-  style?: object
-  canvasStyle?: object
+  style?: object // eslint-disable-line @typescript-eslint/ban-types
+  canvasStyle?: object // eslint-disable-line @typescript-eslint/ban-types
   handleStart?: (bound?: Bound, space?: CanvasSpace, form?: CanvasForm) => void
   handleAnimate: (
     space?: CanvasSpace,
