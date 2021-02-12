@@ -129,7 +129,7 @@ export const PtsCanvas: React.FC<PtsCanvasProps> = (props) => {
 
 PtsCanvas.defaultProps = {
   name: 'pts-react', // maps to className of the container div
-  background: '#9ab',
+  background: 'transparent',
   resize: true,
   retina: true,
   play: true,
