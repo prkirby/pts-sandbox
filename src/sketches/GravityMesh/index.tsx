@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Create, Circle, Rectangle, Num } from 'pts'
 import type { CanvasSpace, CanvasForm, PtLike } from 'pts'
 import { PtsCanvas } from '../PtsCanvas'
@@ -23,33 +23,50 @@ export const GravityMesh: React.FC<GravityMeshProps> = ({
   push = false,
   gravityRadius = 50,
 }) => {
+  // Store these as refs, so the handleAnimate function can access them on prop update
+  const colorRef = useRef(color)
+  const shapeRef = useRef(shape)
+  const sizeRef = useRef(size)
+  const spacingRef = useRef(spacing)
+  const gravityRef = useRef(gravity)
+  const pushRef = useRef(push)
+  const gravityRadiusRef = useRef(gravityRadius)
+
+  useEffect(() => {
+    colorRef.current = color
+    shapeRef.current = shape
+    sizeRef.current = size
+    spacingRef.current = spacing
+    gravityRef.current = gravity
+    pushRef.current = push
+    gravityRadiusRef.current = gravityRadius
+  })
+
   const handleAnimate = (space: CanvasSpace, form: CanvasForm) => {
     const pts = Create.gridPts(
       space.innerBound,
-      Math.floor(space.width / spacing),
-      Math.floor(space.height / spacing)
+      Math.floor(space.width / spacingRef.current),
+      Math.floor(space.height / spacingRef.current)
     )
 
-    console.log(pts)
-
-    form.fillOnly(color)
+    form.fillOnly(colorRef.current)
 
     const determineSize = (pt: PtLike): number => {
       const distance = distanceBetweenPts(pt, space.pointer)
-      let modifier = push ? gravity : 1
-      if (distance < gravityRadius) {
+      let modifier = pushRef.current ? gravityRef.current : 1
+      if (distance < gravityRadiusRef.current) {
         modifier = Num.mapToRange(
-          push ? distance : gravityRadius - distance,
+          pushRef.current ? distance : gravityRadiusRef.current - distance,
           0,
-          gravityRadius,
+          gravityRadiusRef.current,
           1,
-          gravity
+          gravityRef.current
         )
       }
-      return size * modifier
+      return sizeRef.current * modifier
     }
 
-    switch (shape) {
+    switch (shapeRef.current) {
       case 'circle':
         pts.forEach((pt) =>
           form.circle(Circle.fromCenter(pt, determineSize(pt) / 2))

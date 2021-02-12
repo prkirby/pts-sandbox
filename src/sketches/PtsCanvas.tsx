@@ -40,7 +40,7 @@ export const PtsCanvas: React.FC<PtsCanvasProps> = (props) => {
   const formRef = useRef(null)
 
   /**
-   * When canvRef Updates (ready for space)
+   * When canvRef or animate functions update, recreate the space
    */
   useEffect(() => {
     // Create CanvasSpace with the canvRef and assign to spaceRef
