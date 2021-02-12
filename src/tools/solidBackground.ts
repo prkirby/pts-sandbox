@@ -1,18 +1,11 @@
-import type { CanvasSpace, CanvasForm, GroupLike } from 'pts'
+import type { CanvasSpace, CanvasForm } from 'pts'
 import { fullWidthRect } from './'
 
+// Draws a solid background given a space, form, and color
 export function solidBackground(
   space: CanvasSpace,
   form: CanvasForm,
   color: string
 ): void {
-  let background: GroupLike
-  space.add({
-    start: () => {
-      background = fullWidthRect(space)
-    },
-    animate: () => {
-      form.fill(color).stroke(color).rect(background)
-    },
-  })
+  form.fill(color).stroke(color).rect(fullWidthRect(space))
 }
