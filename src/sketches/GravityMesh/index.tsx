@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import { Create, Circle, Rectangle, Num } from 'pts'
-import type { CanvasSpace, CanvasForm, PtLike } from 'pts'
-import { PtsCanvas } from '../PtsCanvas'
+import { Create, Circle, Rectangle, Num, PtLike } from 'pts'
+import { HandleAnimateFn, PtsCanvas } from 'react-pts-canvas'
 import { distanceBetweenPts } from '../../tools'
 
 export interface GravityMeshProps {
@@ -42,7 +41,8 @@ export const GravityMesh: React.FC<GravityMeshProps> = ({
     gravityRadiusRef.current = gravityRadius
   })
 
-  const handleAnimate = (space: CanvasSpace, form: CanvasForm) => {
+  const handleAnimate: HandleAnimateFn = (space, form) => {
+    if (!space || !form) return
     const pts = Create.gridPts(
       space.innerBound,
       Math.floor(space.width / spacingRef.current),
@@ -83,7 +83,8 @@ export const GravityMesh: React.FC<GravityMeshProps> = ({
   return (
     <PtsCanvas
       name="gravity-mesh"
-      handleAnimate={handleAnimate}
+      background="transparent"
+      onAnimate={handleAnimate}
       style={{ height: '100%', width: '100%' }}
       canvasStyle={{ width: '100%', height: '100%' }}
       resize={true}

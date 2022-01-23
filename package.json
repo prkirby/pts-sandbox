@@ -22,7 +22,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pts": "^0.9.6",
+    "pts": "^0.10.9",
     "react-pts-canvas": "^0.2.8"
   },
   "peerDependencies": {
