@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { PtsCanvas } from '../PtsCanvas'
+import { HandleStartFn, PtsCanvas } from 'react-pts-canvas'
 import {
   CanvasSpace,
   Tempo,
@@ -15,7 +15,7 @@ import { COLORS, INTRO_TEXT } from './constants'
 import { BackgroundParticles, solidBackground, rgbaFromHex } from '../../tools'
 import SONG from '../../assets/daniel_birch_restless_states_constrained_desire_2.mp3'
 
-export const FallingOcean: React.FC = () => {
+export const FallingOcean = () => {
   const backgroundParticlesRef = useRef(null)
   const micRef = useRef(null)
   const tempoRef = useRef(Tempo.fromBeat(50))
@@ -186,7 +186,11 @@ export const FallingOcean: React.FC = () => {
     }
   }
 
-  const handleStart = (bound: Bound, space: CanvasSpace, form: CanvasForm) => {
+  const handleStart: HandleStartFn = (
+    bound: Bound,
+    space: CanvasSpace,
+    form: CanvasForm
+  ) => {
     connectMicrophone()
     loadAudio()
     backgroundParticlesRef.current = new BackgroundParticles(
@@ -211,8 +215,8 @@ export const FallingOcean: React.FC = () => {
     <PtsCanvas
       name="falling-ocean"
       play={playing}
-      handleStart={handleStart}
-      handleAnimate={handleAnimate}
+      onStart={handleStart}
+      onAnimate={handleAnimate}
       style={{ height: '100%', width: '100%' }}
       tempo={tempoRef.current}
       canvasStyle={{ width: '100%', height: '100%' }}
