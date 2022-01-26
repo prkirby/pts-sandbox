@@ -41,12 +41,12 @@ describe('fullWidthRect', () => {
     Object.defineProperty(
       HTMLElement.prototype,
       'offsetHeight',
-      originalOffsetHeight
+      originalOffsetHeight!
     )
     Object.defineProperty(
       HTMLElement.prototype,
       'offsetWidth',
-      originalOffsetWidth
+      originalOffsetWidth!
     )
   })
 

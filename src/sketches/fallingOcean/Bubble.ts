@@ -46,7 +46,7 @@ class Bubble {
       .rotate2D(Math.PI, space.center)
     const lineTowardsLight = new Group(this.center, pointerOpposite)
     const newCenter = lineTowardsLight.interpolate(
-      Num.mapToRange(this.desc.magnitude, 0, 1, 0.0001, 0.015)
+      Num.mapToRange(this.desc.magnitude!, 0, 1, 0.0001, 0.015)
     )
     this.center.to(newCenter)
   }
@@ -61,14 +61,14 @@ class Bubble {
       0,
       1,
       0,
-      this.desc.maxAlpha + 0.1
+      this.desc.maxAlpha! + 0.1
     )
     const strokeAlpha = Num.mapToRange(
       this.alphaCycle,
       0,
       1,
       0,
-      this.desc.maxAlpha
+      this.desc.maxAlpha!
     )
     const circle = Circle.fromCenter(this.center, this.size)
     form

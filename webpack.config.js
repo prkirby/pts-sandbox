@@ -52,9 +52,9 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
-      tools: path.resolve(__dirname, './src/tools/'),
-      sketches: path.resolve(__dirname, './src/sketches/'),
-      types: path.resolve(__dirname, './src/types/'),
+      '@tools': path.resolve(__dirname, './src/tools/'),
+      '@sketches': path.resolve(__dirname, './src/sketches/'),
+      '@types': path.resolve(__dirname, './src/types/'),
       react: path.resolve('./node_modules/react'),
     },
   },

@@ -45,6 +45,7 @@ export class BackgroundParticles {
    * @param form
    */
   private drawPoint = function (
+    this: BackgroundParticles,
     point: Pt,
     index: number,
     cycle: number,
@@ -57,7 +58,7 @@ export class BackgroundParticles {
       .fillOnly(
         rgbaFromHex(
           this.color,
-          Num.mapToRange(cycle, 0, 1, desc.minAlpha, desc.maxAlpha)
+          Num.mapToRange(cycle, 0, 1, desc.minAlpha!, desc.maxAlpha!)
         )
       )
       .point(point, 1, 'circle')
@@ -71,7 +72,7 @@ export class BackgroundParticles {
    */
   private updatePoint(point: Pt, index: number, bound: Bound) {
     const desc = this._pointDescriptions[index]
-    point.toAngle(desc.angle, desc.magnitude, true)
+    point.toAngle(desc.angle!, desc.magnitude, true)
     // If point is outside of bound, move it to random point within bound
     if (!Rectangle.withinBound(bound, point)) {
       point.to(Create.distributeRandom(bound, 1)[0])

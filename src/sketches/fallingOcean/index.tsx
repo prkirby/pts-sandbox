@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { HandleStartFn, PtsCanvas } from 'react-pts-canvas'
+import { HandleAnimateFn, HandleStartFn, PtsCanvas } from 'react-pts-canvas'
 import {
   CanvasSpace,
   Tempo,
@@ -16,11 +16,11 @@ import { BackgroundParticles, solidBackground, rgbaFromHex } from '../../tools'
 import SONG from '../../assets/daniel_birch_restless_states_constrained_desire_2.mp3'
 
 export const FallingOcean = () => {
-  const backgroundParticlesRef = useRef(null)
-  const micRef = useRef(null)
+  const backgroundParticlesRef = useRef<BackgroundParticles>()
+  const micRef = useRef<Sound>()
   const tempoRef = useRef(Tempo.fromBeat(50))
-  const songRef = useRef(null)
-  const bubbleGroupsRef = useRef([])
+  const songRef = useRef<Sound>()
+  const bubbleGroupsRef = useRef<BubbleGroup[]>([])
   const [playing, setPlaying] = useState(true)
 
   // Set up pause event listener
@@ -179,7 +179,8 @@ export const FallingOcean = () => {
    * Handle a pause action
    */
   const handlePause = () => {
-    if (songRef.current && songRef.current.playing) {
+    if (!songRef.current) return
+    if (songRef.current.playing) {
       songRef.current.stop()
     } else {
       songRef.current.start()
@@ -187,10 +188,11 @@ export const FallingOcean = () => {
   }
 
   const handleStart: HandleStartFn = (
-    bound: Bound,
-    space: CanvasSpace,
-    form: CanvasForm
+    bound?: Bound,
+    space?: CanvasSpace,
+    form?: CanvasForm
   ) => {
+    if (!bound || !space || !form) return
     connectMicrophone()
     loadAudio()
     backgroundParticlesRef.current = new BackgroundParticles(
@@ -201,13 +203,15 @@ export const FallingOcean = () => {
     setupDrawText(space, form)
   }
 
-  const handleAnimate = (
-    space: CanvasSpace,
-    form: CanvasForm,
-    time: number
+  const handleAnimate: HandleAnimateFn = (
+    space?: CanvasSpace,
+    form?: CanvasForm,
+    time?: number
   ) => {
+    if (!space || !form || !time) return
     drawBackground(space, form, time)
-    backgroundParticlesRef.current.draw(space, form, time)
+    if (backgroundParticlesRef.current)
+      backgroundParticlesRef.current.draw(space, form, time)
     drawBubbles(space, form, time)
   }
 
