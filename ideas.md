@@ -6,3 +6,7 @@
 - Generate an animation based on an image uploaded ( have abililty to share it). Eventually could integrate generated music into it.
 - Build out Golden Ratio "flower" example IE: https://www.youtube.com/watch?v=sj8Sg8qnjOg
 - Reimanns Therom Visualization https://www.youtube.com/watch?v=zlm1aajH6gY
+
+## Misc Maintenance / Tooling Ideas
+
+- Add StoryBook so you can view / play with all sketches
