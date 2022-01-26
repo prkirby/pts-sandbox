@@ -22,6 +22,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "mathjs": "^10.1.0",
     "pts": "^0.10.9",
     "react-pts-canvas": "^0.2.8"
   },

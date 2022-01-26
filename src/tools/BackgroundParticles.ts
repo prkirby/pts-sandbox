@@ -16,12 +16,12 @@ export class BackgroundParticles {
   constructor(
     bound: Bound,
     color: string,
-    composite?: string,
+    composite = 'color-dodge',
     minPoints = 80,
     maxPoints = 200
   ) {
     this.color = color
-    this.composite = composite || 'source-over'
+    this.composite = composite
     this._points = Create.distributeRandom(
       bound,
       Num.randomRange(minPoints, maxPoints)
