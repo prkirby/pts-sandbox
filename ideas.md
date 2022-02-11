@@ -6,6 +6,7 @@
 - Generate an animation based on an image uploaded ( have abililty to share it). Eventually could integrate generated music into it.
 - Build out Golden Ratio "flower" example IE: https://www.youtube.com/watch?v=sj8Sg8qnjOg
 - Reimanns Therom Visualization https://www.youtube.com/watch?v=zlm1aajH6gY
+- Gaussian Curvature : Balls of Light that react to something or other, adjustable inputs. Dot matrix.
 
 ## Misc Maintenance / Tooling Ideas
 
